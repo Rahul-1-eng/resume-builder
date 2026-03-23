@@ -1,0 +1,400 @@
+{% extends 'layout.html' %}
+{% block title %}Resume Preview · ResumeForge{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 no-print">
+    <div>
+        <span class="eyebrow">Live preview</span>
+        <h1 class="fw-bold text-white mb-1">{{ resume.full_name }}</h1>
+        <p class="text-white-50 mb-0">Your resume has been built and saved successfully.</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <a href="{{ url_for('resume_terminal', resume_id=resume.id) }}" class="btn btn-light">Open Terminal</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light">Dashboard</a>
+        <button type="button" onclick="window.print()" class="btn btn-gradient">Print / Save PDF</button>
+    </div>
+</div>
+
+<style>
+    .resume-preview {
+        width: 100%;
+        max-width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.16);
+        display: grid;
+        grid-template-columns: 320px 1fr;
+    }
+
+    .resume-sidebar {
+        background: linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+        border-right: 1px solid #d9e3f0;
+        padding: 36px 28px;
+    }
+
+    .resume-main {
+        padding: 40px 42px;
+    }
+
+    .resume-photo {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 18px;
+        border: 4px solid #ffffff;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .resume-sidebar h2 {
+        font-size: 1.55rem;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 6px;
+        color: #0f172a;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .resume-role {
+        text-align: center;
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: #315caa;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 28px;
+    }
+
+    .resume-side-block {
+        margin-bottom: 24px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .resume-side-block h6 {
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: #0f172a;
+        margin-bottom: 12px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid #315caa;
+        display: inline-block;
+    }
+
+    .resume-side-block p,
+    .resume-side-block a {
+        margin: 0 0 10px;
+        font-size: 0.95rem;
+        color: #334155;
+        line-height: 1.6;
+        word-break: break-word;
+        text-decoration: none;
+    }
+
+    .resume-main-header {
+        margin-bottom: 26px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .resume-main-name {
+        font-size: 2.2rem;
+        font-weight: 800;
+        line-height: 1.05;
+        text-transform: uppercase;
+        color: #0f172a;
+        margin-bottom: 6px;
+        letter-spacing: 0.5px;
+    }
+
+    .resume-main-title {
+        color: #315caa;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .resume-main-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        font-size: 0.92rem;
+        color: #64748b;
+        margin-bottom: 18px;
+    }
+
+    .resume-summary {
+        font-size: 0.98rem;
+        color: #475569;
+        line-height: 1.8;
+        margin: 0;
+        text-align: justify;
+    }
+
+    .resume-section {
+        margin-bottom: 28px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .resume-section h4 {
+        font-size: 0.86rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        color: #0f172a;
+        margin-bottom: 14px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid #315caa;
+        display: inline-block;
+    }
+
+    .resume-entry {
+        position: relative;
+        padding-left: 18px;
+        margin-bottom: 14px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .resume-entry::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #315caa;
+    }
+
+    .resume-entry p {
+        margin: 0;
+        font-size: 0.96rem;
+        color: #1e293b;
+        line-height: 1.75;
+        white-space: pre-line;
+    }
+
+    .skill-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .skill-tag {
+        display: inline-block;
+        padding: 6px 10px;
+        background: #ffffff;
+        border: 1px solid #d6e2f2;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    @media (max-width: 991px) {
+        .resume-preview {
+            grid-template-columns: 1fr;
+            max-width: 100%;
+            min-height: auto;
+        }
+
+        .resume-sidebar {
+            border-right: none;
+            border-bottom: 1px solid #d9e3f0;
+        }
+
+        .resume-main {
+            padding: 30px 24px;
+        }
+    }
+
+    @media print {
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
+        html, body {
+            background: #ffffff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 210mm;
+            min-height: 297mm;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body * {
+            visibility: hidden !important;
+        }
+
+        #resume-card,
+        #resume-card * {
+            visibility: visible !important;
+        }
+
+        #resume-card {
+            position: static !important;
+            width: 100% !important;
+            max-width: 210mm !important;
+            min-height: auto !important;
+            margin: 0 auto !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            display: grid !important;
+            grid-template-columns: 320px 1fr !important;
+            background: #ffffff !important;
+            overflow: hidden !important;
+        }
+
+        .resume-sidebar {
+            background: #eef4ff !important;
+            border-right: 1px solid #d9e3f0 !important;
+            padding: 24px 20px !important;
+        }
+
+        .resume-main {
+            padding: 24px !important;
+        }
+
+        .no-print,
+        nav,
+        header,
+        footer,
+        .navbar,
+        .btn,
+        .eyebrow,
+        .text-white-50,
+        .d-flex.justify-content-between.align-items-center.flex-wrap.gap-3.mb-4 {
+            display: none !important;
+        }
+    }
+</style>
+
+{% set education_list = resume.education.split('\n') if resume.education else [] %}
+{% set experience_list = resume.experience.split('\n') if resume.experience else [] %}
+{% set project_list = resume.projects.split('\n') if resume.projects else [] %}
+{% set skills_list = resume.skills.split('\n') if resume.skills else [] %}
+{% set language_list = resume.languages.split('\n') if resume.languages else [] %}
+{% set achievement_list = resume.achievements.split('\n') if resume.achievements else [] %}
+
+<article class="resume-preview" id="resume-card">
+    <aside class="resume-sidebar">
+        {% if resume.photo_filename and resume.show_photo %}
+        <img src="{{ url_for('static', filename='uploads/' + resume.photo_filename) }}" alt="Profile photo" class="resume-photo">
+        {% endif %}
+
+        <h2>{{ resume.full_name }}</h2>
+        <p class="resume-role">{{ resume.title }}</p>
+
+        <div class="resume-side-block">
+            <h6>Contact</h6>
+            {% if resume.email %}<p>{{ resume.email }}</p>{% endif %}
+            {% if resume.phone %}<p>{{ resume.phone }}</p>{% endif %}
+            {% if resume.address %}<p>{{ resume.address }}</p>{% endif %}
+        </div>
+
+        {% if resume.show_socials and (resume.linkedin or resume.github or resume.website or resume.portfolio) %}
+        <div class="resume-side-block">
+            <h6>Links</h6>
+            {% if resume.linkedin %}<p><a href="{{ resume.linkedin }}" target="_blank">LinkedIn Profile</a></p>{% endif %}
+            {% if resume.github %}<p><a href="{{ resume.github }}" target="_blank">GitHub Profile</a></p>{% endif %}
+            {% if resume.website %}<p><a href="{{ resume.website }}" target="_blank">Personal Website</a></p>{% endif %}
+            {% if resume.portfolio %}<p><a href="{{ resume.portfolio }}" target="_blank">Portfolio Link</a></p>{% endif %}
+        </div>
+        {% endif %}
+
+        {% if skills_list %}
+        <div class="resume-side-block">
+            <h6>Skills</h6>
+            <div class="skill-tags">
+                {% for item in skills_list if item.strip() %}
+                    <span class="skill-tag">{{ item.strip('•- ') }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if language_list %}
+        <div class="resume-side-block">
+            <h6>Languages</h6>
+            {% for item in language_list if item.strip() %}
+                <p>{{ item.strip('•- ') }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </aside>
+
+    <section class="resume-main">
+        <div class="resume-main-header">
+            <div class="resume-main-name">{{ resume.full_name }}</div>
+            <div class="resume-main-title">{{ resume.title }}</div>
+
+            <div class="resume-main-meta">
+                {% if resume.email %}<span>{{ resume.email }}</span>{% endif %}
+                {% if resume.phone %}<span>{{ resume.phone }}</span>{% endif %}
+                {% if resume.address %}<span>{{ resume.address }}</span>{% endif %}
+            </div>
+
+            {% if resume.summary %}
+            <p class="resume-summary">{{ resume.summary }}</p>
+            {% endif %}
+        </div>
+
+        {% if education_list %}
+        <div class="resume-section">
+            <h4>Education</h4>
+            {% for item in education_list if item.strip() %}
+            <div class="resume-entry">
+                <p>{{ item.strip('•- ') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if experience_list %}
+        <div class="resume-section">
+            <h4>Experience</h4>
+            {% for item in experience_list if item.strip() %}
+            <div class="resume-entry">
+                <p>{{ item.strip('•- ') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if project_list %}
+        <div class="resume-section">
+            <h4>Projects</h4>
+            {% for item in project_list if item.strip() %}
+            <div class="resume-entry">
+                <p>{{ item.strip('•- ') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if achievement_list %}
+        <div class="resume-section">
+            <h4>Achievements</h4>
+            {% for item in achievement_list if item.strip() %}
+            <div class="resume-entry">
+                <p>{{ item.strip('•- ') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </section>
+</article>
+{% endblock %}

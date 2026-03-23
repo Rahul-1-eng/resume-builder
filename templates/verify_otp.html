@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block title %}Verify OTP · ResumeForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="auth-card text-center">
+            <span class="eyebrow">Email verification</span>
+            <h2 class="fw-bold mb-3">Enter the 6-digit OTP</h2>
+            <p class="text-secondary mb-4">We sent a code to <strong>{{ pending_email }}</strong>. The code expires in 5 minutes.</p>
+            <form method="post" novalidate>
+                <div class="mb-4">
+                    <label for="otp" class="form-label d-block text-start">One-Time Password</label>
+                    <input type="text" class="form-control form-control-lg text-center otp-input" id="otp" name="otp" maxlength="6" required>
+                </div>
+                <button type="submit" class="btn btn-gradient w-100 btn-lg">Verify & Continue</button>
+            </form>
+            <a href="{{ url_for('resend_otp') }}" class="btn btn-link mt-3">Resend OTP</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

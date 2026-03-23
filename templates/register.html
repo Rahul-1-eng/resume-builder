@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block title %}Register · ResumeForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-xl-5 col-lg-6">
+        <div class="auth-card">
+            <span class="eyebrow">Create account</span>
+            <h2 class="fw-bold mb-3">Start building your resume</h2>
+            <form method="post" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Gmail / Email address</label>
+                    <input type="email" class="form-control form-control-lg" id="username" name="username" placeholder="you@gmail.com" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control form-control-lg" id="confirm_password" name="confirm_password" required>
+                </div>
+                <div class="small text-secondary mb-4">Use at least 8 characters with uppercase, lowercase, a number, and a special character.</div>
+                <button type="submit" class="btn btn-gradient w-100 btn-lg">Create account</button>
+            </form>
+            <p class="mt-4 text-secondary mb-0">Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block title %}Enhanced Terminal · ResumeForge{% endblock %}
+{% block content %}
+<div class="terminal-wrapper mx-auto">
+    <div class="terminal-card enhanced-terminal">
+        <div class="terminal-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <div class="terminal-title">Enhanced Text Analyzer · {{ resume.full_name }}</div>
+        </div>
+        <div class="terminal-body">
+            <h2 class="text-white mb-2">Enhanced palindrome checker</h2>
+            <p class="text-white-50">Spaces and punctuation are ignored for a more realistic check.</p>
+            <form method="post">
+                <label class="form-label text-white-50">Input text</label>
+                <textarea class="form-control terminal-input mb-3" id="input_str" name="input_str" rows="4" placeholder="A man, a plan, a canal, Panama">{{ input_str }}</textarea>
+                <button type="submit" class="btn btn-gradient">Analyze</button>
+            </form>
+            {% if result is not none %}
+            <div class="terminal-output mt-4">
+                <div class="small text-uppercase text-white-50">Result</div>
+                <div class="fs-4 fw-bold text-white">{{ result }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

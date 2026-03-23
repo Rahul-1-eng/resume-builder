@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Database
+instance/
+*.db
+
+# Uploads
+static/uploads/
+
+# Secrets
+.env
+
+# Virtual env
+venv/

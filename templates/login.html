@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block title %}Login · ResumeForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-75">
+    <div class="col-lg-6">
+        <div class="hero-copy mb-4 mb-lg-0">
+            <span class="eyebrow">Secure resume builder</span>
+            <h1 class="display-5 fw-bold text-white mb-3">Build polished resumes with email OTP login.</h1>
+            <p class="lead text-white-50">Modern UI, Gmail OTP verification, instant resume preview, and a cleaner workflow from sign in to final output.</p>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="auth-card">
+            <h2 class="fw-bold mb-2">Welcome back</h2>
+            <p class="text-secondary mb-4">Log in with your email and password to continue.</p>
+            <form method="post" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Email</label>
+                    <input type="email" class="form-control form-control-lg" id="username" name="username" placeholder="you@gmail.com" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-gradient w-100 btn-lg">Send OTP</button>
+            </form>
+            <p class="mt-4 text-secondary mb-0">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

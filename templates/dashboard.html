@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+{% block title %}Dashboard · ResumeForge{% endblock %}
+{% block content %}
+<section class="dashboard-hero card-panel mb-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-4 align-items-lg-center">
+        <div>
+            <span class="eyebrow">Dashboard</span>
+            <h1 class="fw-bold text-white mb-2">Welcome, {{ user.username }}</h1>
+            <p class="text-white-50 mb-0">Manage resumes, preview your latest version, and test content from one place.</p>
+        </div>
+        <div class="d-flex gap-3 flex-wrap">
+            <a href="{{ url_for('create_resume') }}" class="btn btn-light btn-lg rounded-pill px-4">Create Resume</a>
+        </div>
+    </div>
+</section>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-label">Total resumes</div>
+            <div class="stat-value">{{ resumes|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-label">Checks logged</div>
+            <div class="stat-value">{{ recent_logs|length }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-label">Account created</div>
+            <div class="stat-value smallish">{{ user.created_at.strftime('%d %b %Y') }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card-panel h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Your resumes</h3>
+                <a href="{{ url_for('create_resume') }}" class="btn btn-outline-light btn-sm">New</a>
+            </div>
+            {% if resumes %}
+                <div class="vstack gap-3">
+                    {% for resume in resumes %}
+                    <div class="resume-list-item">
+                        <div>
+                            <h5 class="mb-1 text-white">{{ resume.full_name }}</h5>
+                            <div class="text-white-50 small">{{ resume.title }} · updated {{ resume.updated_at.strftime('%d %b %Y, %I:%M %p') }}</div>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{{ url_for('view_resume', resume_id=resume.id) }}" class="btn btn-light btn-sm">Preview</a>
+                            <a href="{{ url_for('resume_terminal', resume_id=resume.id) }}" class="btn btn-outline-light btn-sm">Terminal</a>
+                            <form method="post" action="{{ url_for('delete_resume', resume_id=resume.id) }}" onsubmit="return confirm('Delete this resume?');">
+                                <button class="btn btn-outline-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h5 class="text-white">No resumes yet</h5>
+                    <p class="text-white-50">Create your first resume and preview it instantly.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-panel h-100">
+            <h3 class="mb-3">Recent checks</h3>
+            {% if recent_logs %}
+                <div class="vstack gap-3">
+                    {% for log in recent_logs %}
+                    <div class="terminal-log-item">
+                        <div class="fw-semibold text-white">{{ log.result }}</div>
+                        <div class="small text-white-50">"{{ log.input_str }}"</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-white-50 mb-0">Your palindrome activity will appear here.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
