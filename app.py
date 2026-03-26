@@ -397,9 +397,10 @@ def inject_global_theme_data():
 
 @app.route("/")
 def index():
-    if require_auth():
+      if require_auth():
         return redirect(url_for("dashboard"))
-    return redirect(url_for("login"))
+    # return redirect(url_for("login"))
+        return render_template("home.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -752,4 +753,4 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
